@@ -7,15 +7,12 @@ Aplikasi manajemen properti yang dibangun dengan Laravel.
 - **Backend:** Laravel 12, PHP 8.2+
 - **Frontend:** Blade, Bootstrap
 - **Database:** MySQL atau PostgreSQL
-- **Tools Lainnya:** (Tambahkan jika ada, seperti Redis, Queues, dll.)
 
 ## Persyaratan Sistem
 
 - PHP >= 8.3
 - Composer
 - MySQL atau PostgreSQL
-- Node.js & NPM (untuk frontend build)
-- (Tambahkan jika ada persyaratan lain seperti Redis, Supervisor, dll.)
 
 ## Cara Instalasi
 
@@ -111,18 +108,3 @@ Jalankan pengujian dengan perintah berikut:
 ```bash
 php artisan test
 ```
-
-## Kontribusi
-
-Jika ingin berkontribusi, silakan buat pull request atau laporkan masalah di [repository ini](https://github.com/Rosamdani/listing-properties/issues).
-
-## Ucapan Terima Kasih
-
-- [Laravel](https://laravel.com)
-- [Bootstrap](https://getbootstrap.com)
-- (Tambahkan jika ada teknologi lain yang digunakan)
-
-## Lisensi
-
-Proyek ini dirilis di bawah lisensi [MIT](LICENSE).
-
