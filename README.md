@@ -1,166 +1,128 @@
-# Project Name
+# Listing Properties
 
-A powerful [brief description of your project] built with Laravel.
+Aplikasi manajemen properti yang dibangun dengan Laravel.
 
-## Features
+## Teknologi yang Digunakan
 
-- [Key feature 1]
-- [Key feature 2]
-- [Key feature 3]
-- Authentication system with role-based permissions
-- Responsive UI using [frontend framework/library]
-- [Any other notable features]
+- **Backend:** Laravel 12, PHP 8.2+
+- **Frontend:** Blade, Bootstrap
+- **Database:** MySQL atau PostgreSQL
+- **Tools Lainnya:** (Tambahkan jika ada, seperti Redis, Queues, dll.)
 
-## Technologies Used
+## Persyaratan Sistem
 
-- **Backend:** Laravel 10, PHP 8.1+
-- **Frontend:** [Blade/Vue.js/React/etc.], [TailwindCSS/Bootstrap/etc.]
-- **Database:** MySQL/PostgreSQL
-- **Authentication:** Laravel Sanctum/Passport/Breeze/Jetstream
-- **Deployment:** [Your deployment platform]
-- **Other Tools:** [Additional tools, libraries, services]
-
-## Requirements
-
-- PHP >= 8.1
+- PHP >= 8.3
 - Composer
-- Node.js & NPM
-- MySQL or PostgreSQL
-- [Any other requirements]
+- MySQL atau PostgreSQL
+- Node.js & NPM (untuk frontend build)
+- (Tambahkan jika ada persyaratan lain seperti Redis, Supervisor, dll.)
 
-## Installation
+## Cara Instalasi
 
-1. **Clone the repository**
+### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/project-name.git
-cd project-name
+git clone https://github.com/Rosamdani/listing-properties.git
+cd listing-properties
 ```
 
-2. **Install PHP dependencies**
+### 2. Instalasi Dependensi PHP
 
 ```bash
 composer install
 ```
 
-3. **Install NPM dependencies**
+### 3. Instalasi Dependensi NPM
 
 ```bash
-npm install
+npm install && npm run dev
 ```
 
-4. **Environment Configuration**
+### 4. Konfigurasi Environment
 
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
-5. **Configure your environment variables in .env file**
+### 5. Konfigurasi Database
+
+Edit file `.env` dan sesuaikan dengan konfigurasi database:
 
 ```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=your_database_name
-DB_USERNAME=your_database_username
-DB_PASSWORD=your_database_password
+DB_DATABASE=nama_database
+DB_USERNAME=username_database
+DB_PASSWORD=password_database
 ```
 
-6. **Run database migrations and seeders**
+### 6. Migrasi dan Seeding Database
 
 ```bash
 php artisan migrate --seed
 ```
 
-7. **Create symbolic link for storage**
+### 7. Buat Symbolic Link untuk Storage
 
 ```bash
 php artisan storage:link
 ```
 
-8. **Compile assets**
-
-```bash
-npm run dev
-# or for production
-npm run build
-```
-
-9. **Start the development server**
+### 8. Menjalankan Server Pengembangan
 
 ```bash
 php artisan serve
 ```
 
-The application will be available at http://localhost:8000
+Aplikasi akan tersedia di: [http://localhost:8000](http://localhost:8000)
 
-## Usage
-
-[Add instructions on how to use your application, including any admin credentials for testing, API endpoints, etc.]
-
-## Project Structure
+## Struktur Proyek
 
 ```
-├── app/                # Application code
-│   ├── Console/        # Artisan commands
-│   ├── Exceptions/     # Exception handlers
+├── app/                # Kode aplikasi utama
 │   ├── Http/           # Controllers, Middleware, Requests
-│   ├── Models/         # Eloquent models
+│   ├── Models/         # Model Eloquent
 │   ├── Providers/      # Service providers
 │   └── Services/       # Custom services
-├── bootstrap/          # Framework bootstrap files
-├── config/             # Configuration files
-├── database/           # Migrations, seeders, factories
-├── public/             # Publicly accessible files
-├── resources/          # Views, assets, and language files
-│   ├── js/             # JavaScript files
-│   ├── css/            # CSS files
-│   └── views/          # Blade templates
-├── routes/             # Application routes
-│   ├── api.php         # API routes
-│   ├── channels.php    # Broadcasting channels
-│   ├── console.php     # Console commands
-│   └── web.php         # Web routes
-├── storage/            # App storage (logs, cache, etc.)
-├── tests/              # Automated tests
-├── vendor/             # Composer dependencies
-└── .env                # Environment variables
+├── bootstrap/          # Bootstrap framework Laravel
+├── config/             # File konfigurasi aplikasi
+├── database/           # Migrasi, Seeder, Factories
+├── public/             # Akses publik (assets, storage)
+├── resources/          # Views, assets, dan file bahasa
+│   ├── js/             # File JavaScript
+│   ├── css/            # File CSS
+│   └── views/          # Template Blade
+├── routes/             # Route aplikasi
+│   ├── api.php         # Route untuk API
+│   ├── console.php     # Perintah konsol
+│   └── web.php         # Route web
+├── storage/            # Penyimpanan aplikasi (log, cache, dll.)
+├── tests/              # Pengujian otomatis
+├── vendor/             # Dependensi Composer
+└── .env                # Variabel lingkungan
 ```
 
-## API Documentation
+## Pengujian
 
-[If your project has an API, document the endpoints here or link to external documentation]
-
-## Testing
+Jalankan pengujian dengan perintah berikut:
 
 ```bash
 php artisan test
 ```
 
-## Deployment
+## Kontribusi
 
-[Provide instructions for deploying to production]
+Jika ingin berkontribusi, silakan buat pull request atau laporkan masalah di [repository ini](https://github.com/Rosamdani/listing-properties/issues).
 
-## Contributing
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
-## Contact
-
-Your Name - your.email@example.com
-
-Project Link: [https://github.com/yourusername/project-name](https://github.com/yourusername/project-name)
-
-## Acknowledgements
+## Ucapan Terima Kasih
 
 - [Laravel](https://laravel.com)
-- [Any libraries, packages, resources you used]
+- [Bootstrap](https://getbootstrap.com)
+- (Tambahkan jika ada teknologi lain yang digunakan)
+
+## Lisensi
+
+Proyek ini dirilis di bawah lisensi [MIT](LICENSE).
+
