@@ -1,6 +1,8 @@
 <?php
 
-use App\Enum\PropertyStatus;
+use App\Enum\Property\Furnished;
+use App\Enum\Property\ListingType;
+use App\Enum\Property\Status;
 use App\Enum\PropertyType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -14,27 +16,31 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('properties', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->string('name');
-            $table->enum('type', PropertyType::getValues());
-            $table->unsignedBigInteger('price');
-            $table->string('location');
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
-            $table->integer('bedrooms')->default(0);
-            $table->integer('bathrooms')->default(0);
-            $table->integer('garages')->default(0);
-            $table->integer('area')->default(0);
-            $table->boolean('furnished')->default(false);
-            $table->date('available_from')->nullable();
+            $table->id();
+            $table->foreignId('owner_id')->constrained('users');
+            $table->foreignId('agent_id')->nullable()->constrained('agents');
+            $table->enum('property_type', PropertyType::cases());
+            $table->enum('listing_type', ListingType::cases());
+            $table->string('title', 255);
             $table->text('description')->nullable();
-            $table->enum('status', PropertyStatus::getValues());
-            $table->boolean('featured')->default(false);
-            $table->json('amenities')->nullable();
-            $table->string('contact_name')->nullable();
-            $table->string('contact_email')->nullable();
-            $table->string('contact_phone')->nullable();
-            $table->string('slug')->unique();
+            $table->decimal('price', 15, 2);
+            $table->string('currency', 3)->default('IDR');
+            $table->integer('bedrooms')->nullable();
+            $table->decimal('bathrooms', 3, 1)->nullable();
+            $table->decimal('building_size', 10, 2)->nullable();
+            $table->decimal('land_size', 10, 2)->nullable();
+            $table->integer('year_built')->nullable();
+            $table->integer('floors')->nullable();
+            $table->integer('parking_spots')->nullable();
+            $table->enum('furnished', Furnished::cases())->nullable();
+            $table->enum('status', Status::cases())->default('draft');
+            $table->timestamp('published_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_verified')->default(false);
+            $table->integer('view_count')->default(0);
+            $table->string('slug', 255)->unique();
+            $table->string('virtual_tour_url', 255)->nullable();
             $table->timestamps();
         });
     }
