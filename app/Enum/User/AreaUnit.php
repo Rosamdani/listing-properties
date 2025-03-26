@@ -7,6 +7,11 @@ enum AreaUnit:string
     case M = 'm';
     case FT = 'ft';
 
+    public static function values(): array
+    {
+        return array_map(fn ($case) => $case->value, self::cases());
+    }
+
     public function getLabel(): string
     {
         return match($this) 

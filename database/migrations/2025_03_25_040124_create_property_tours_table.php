@@ -18,10 +18,10 @@ return new class extends Migration
             $table->foreignId('property_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('agent_id')->nullable()->constrained('agents');
-            $table->enum('tour_type', TourType::cases());
+            $table->enum('tour_type', TourType::values());
             $table->timestamp('tour_date');
             $table->integer('duration')->default(30);
-            $table->enum('status', TourStatus::cases())->default(TourStatus::REQUESTED);
+            $table->enum('status', TourStatus::values())->default(TourStatus::REQUESTED);
             $table->text('notes')->nullable();
             $table->string('cancelled_reason', 255)->nullable();
             $table->text('feedback')->nullable();

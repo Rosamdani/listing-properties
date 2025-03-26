@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title', 255)->nullable();
             $table->foreignId('property_id')->nullable()->constrained();
             $table->timestamp('last_message_at');
-            $table->enum('status', Status::cases())->default('active');
+            $table->enum('status', Status::values())->default('active');
             $table->timestamps();
         });
     }

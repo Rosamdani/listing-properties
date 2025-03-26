@@ -7,6 +7,11 @@ enum TourType:string
     case IN_PERSON = 'in-person';
     case VIRTUAL = 'virtual';
 
+    public static function values(): array
+    {
+        return array_map(fn ($case) => $case->value, self::cases());
+    }
+
     public function getLabel(): string
     {
         return trans("property.tour_type.{$this->value}");

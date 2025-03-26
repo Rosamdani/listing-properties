@@ -9,6 +9,11 @@ enum PropertyStatus: string
     case SOLD = 'sold';
     case RENTED = 'rented';
 
+    public static function values(): array
+    {
+        return array_map(fn ($case) => $case->value, self::cases());
+    }
+
     public static function getValues(): array
     {
         return array_map(fn (PropertyStatus $status) => $status->value, self::cases());

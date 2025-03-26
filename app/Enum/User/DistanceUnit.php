@@ -7,6 +7,11 @@ enum DistanceUnit:string
     case KM = 'km';
     case MI = 'mi';
 
+    public static function values(): array
+    {
+        return array_map(fn ($case) => $case->value, self::cases());
+    }
+
     public function getLabel(): string
     {
         return match($this) 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('property_id')->constrained();
             $table->decimal('price', 15, 2);
-            $table->enum('event_type', EventPrice::cases());
+            $table->enum('event_type', EventPrice::values());
             $table->timestamp('event_date');
             $table->string('source', 50)->nullable();
             $table->text('notes')->nullable();
