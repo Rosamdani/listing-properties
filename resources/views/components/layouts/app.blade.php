@@ -10,11 +10,17 @@
         <div class="preloader">
             <div class="box"></div>
         </div>
-
+        
+        @if (request()->routeIs('buy') || request()->routeIs('rent'))
+        <x-layouts.header2 />
+        @else
         <x-layouts.header />
+        @endif
+
         {{ $slot }}
     </body>
     @livewireScripts
     <x-wrapper.progress />
     <x-layouts.scripts />
+    @stack('scripts')
 </html>
