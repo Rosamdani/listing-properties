@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('bedrooms')->nullable();
             $table->decimal('bathrooms', 3, 1)->nullable();
             $table->json('property_types')->nullable();
-            $table->enum('notify_frequency', NotifyFrequency::cases())->default(NotifyFrequency::NONE);
+            $table->enum('notify_frequency', NotifyFrequency::values())->default(NotifyFrequency::NONE);
             $table->boolean('is_active')->default(true);
             $table->timestamp('last_notified')->nullable();
             $table->timestamps();

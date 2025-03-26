@@ -21,8 +21,8 @@ return new class extends Migration
             $table->boolean('notification_push')->default(true);
             $table->string('currency', 3)->default('IDR');
             $table->string('language', 5)->default('id-ID');
-            $table->enum('distance_unit', DistanceUnit::cases())->default('km');
-            $table->enum('area_unit', AreaUnit::cases())->default('m');
+            $table->enum('distance_unit', DistanceUnit::values())->default('km');
+            $table->enum('area_unit', AreaUnit::values())->default('m');
             $table->string('theme', 20)->default('light');
             $table->timestamps();
         });

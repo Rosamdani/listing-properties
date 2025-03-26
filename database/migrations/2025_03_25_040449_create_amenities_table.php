@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('neighborhood_id')->constrained();
             $table->string('name', 255);
-            $table->enum('type', AmenitiesType::cases());
+            $table->enum('type', AmenitiesType::values());
             $table->string('address', 255)->nullable();
             $table->decimal('latitude', 10, 8)->nullable();
             $table->decimal('longitude', 11, 8)->nullable();

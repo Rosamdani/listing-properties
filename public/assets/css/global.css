@@ -139,6 +139,17 @@
 ====================================================================
 
 ***/
+.main-header .navbar-collapse ul li a:hover{
+    color: var(--main-color) !important;
+}
+.main-header .navbar-collapse ul li a.active {
+    color: var(--main-color) !important;
+}
+@media screen and (min-width: 767px) {
+    .banner-tabs {
+        width: 700px !important;
+    }
+}
 
 /* width */
 ::-webkit-scrollbar {

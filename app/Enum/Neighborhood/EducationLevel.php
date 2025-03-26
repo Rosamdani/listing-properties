@@ -10,6 +10,11 @@ enum EducationLevel:string
     case SMA = 'SMA';
     case PT = 'PT';
 
+    public static function values(): array
+    {
+        return array_map(fn ($case) => $case->value, self::cases());
+    }
+
     public function getLabel(): string
     {
         return trans("neighborhood.education_level.{$this->value}");

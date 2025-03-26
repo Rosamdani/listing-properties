@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('owner_id')->constrained('users');
             $table->foreignId('agent_id')->nullable()->constrained('agents');
-            $table->enum('property_type', PropertyType::cases());
-            $table->enum('listing_type', ListingType::cases());
+            $table->enum('property_type', PropertyType::values());
+            $table->enum('listing_type', ListingType::values());
             $table->string('title', 255);
             $table->text('description')->nullable();
             $table->decimal('price', 15, 2);
@@ -32,8 +32,8 @@ return new class extends Migration
             $table->integer('year_built')->nullable();
             $table->integer('floors')->nullable();
             $table->integer('parking_spots')->nullable();
-            $table->enum('furnished', Furnished::cases())->nullable();
-            $table->enum('status', Status::cases())->default('draft');
+            $table->enum('furnished', Furnished::values())->nullable();
+            $table->enum('status', Status::values())->default('draft');
             $table->timestamp('published_at')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->boolean('is_featured')->default(false);
