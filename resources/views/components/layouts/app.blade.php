@@ -5,12 +5,12 @@
         <title>{{ $title ?? 'Page Title' }}</title>
         @livewireStyles
     </head>
-    <body>
+    <body style="background-color: #faf9f8;">
         <!-- Preloader -->
         <div class="preloader">
             <div class="box"></div>
         </div>
-        
+
         @if (request()->routeIs('buy') || request()->routeIs('rent'))
         <x-layouts.header2 />
         @else

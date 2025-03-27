@@ -66,6 +66,8 @@
     --main-color: #ffc70b;
     --main-color-rgb: 255, 199, 11;
 
+    --main-hover: #ffba00;
+
     /* #171b2a in decimal RGB */
     --color-two: rgb(23, 27, 42);
     --color-two-rgb: 23, 27, 42;
@@ -106,6 +108,9 @@
     --white-color: rgb(255, 255, 255);
     --white-color-rgb: 255, 255, 255;
 
+    --grey-color: rgb(163, 163, 163);
+    --grey-color-rgb: 173, 173, 173;
+
     /* #000000 in decimal RGB */
     --black-color: rgb(0, 0, 0);
     --black-color-rgb: 0, 0, 0;
@@ -132,6 +137,12 @@
     outline: none;
 }
 
+.btn-primary:hover {
+    background-color: var(--main-hover) !important;
+    border: none;
+    outline: none;
+}
+
 /*** 
 
 ====================================================================
@@ -144,6 +155,33 @@
 }
 .main-header .navbar-collapse ul li a.active {
     color: var(--main-color) !important;
+}
+
+.form-control {
+    box-shadow: var(--main-color) !important;
+}
+
+
+.btn {
+    box-shadow: none !important;
+}
+
+.btn.btn-white {
+    background-color: var(--white-color);
+    border: 2px solid var(--grey-color);
+    color: var(--grey-color);
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.btn.btn-white:checked {
+    background-color: var(--grey-color) !important;
+    color: var(--white-color) !important;
+}
+
+.btn.btn-white:hover {
+    background-color: var(--grey-color);
+    color: var(--white-color);
 }
 @media screen and (min-width: 767px) {
     .banner-tabs {

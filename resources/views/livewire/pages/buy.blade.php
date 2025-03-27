@@ -1,3 +1,4 @@
-<div>
-    {{-- The Master doesn't talk, he acts. --}}
+<div style="margin-top: 120px;">
+    <livewire:actions.property-filters />
+    
 </div>

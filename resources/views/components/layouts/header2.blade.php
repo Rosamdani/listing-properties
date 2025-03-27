@@ -1,5 +1,5 @@
 <!-- Main Header / Header Style Two -->
-<header class="main-header header-style-two fixed-header">
+<header class="main-header header-style-two fixed-header bg-white border-bottom">
 
     <!-- Header Lower -->
     <div class="header-lower">
