@@ -3,15 +3,16 @@
     <head>
         <x-layouts.styles />
         <title>{{ $title ?? 'Page Title' }}</title>
+        @stack('styles')
         @livewireStyles
     </head>
-    <body style="background-color: #faf9f8;">
+    <body style="background-color: #faf9f8; height: 100vh; overflow: hidden;">
         <!-- Preloader -->
         <div class="preloader">
             <div class="box"></div>
         </div>
 
-        <x-layouts.header />
+        <x-layouts.header2 />
 
         {{ $slot }}
     </body>
