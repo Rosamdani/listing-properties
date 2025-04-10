@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Agent;
 use App\Models\Properties;
+use App\Models\PropertyAddress;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
         User::factory(30)->create()->each(function ($user) {
             $agent = Agent::factory()
                 ->for($user)
-                ->has(Properties::factory()->count(5), 'properties')
+                ->has(Properties::factory()->count(5)->has(PropertyAddress::factory(), 'address'), 'properties')
                 ->create();
         });
     }

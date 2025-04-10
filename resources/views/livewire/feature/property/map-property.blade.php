@@ -19,6 +19,6 @@
     </script>
 
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBekxlWO9LD6uZ-dSykcuoo8973dM7AHtM&libraries=places&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_API_KEY') }}&libraries=places&callback=initMap">
     </script>
 @endpush

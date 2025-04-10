@@ -24,6 +24,7 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
+            ->topNavigation()
             ->id('app')
             ->spa()
             ->path('app')
