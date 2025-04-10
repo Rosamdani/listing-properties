@@ -117,4 +117,29 @@ class Properties extends Model implements HasMedia
             }
         });
     }
+
+    public function propertyAddress()
+    {
+        return $this->hasOne(PropertyAddress::class, 'property_id', 'id');
+    }
+
+    public function features()
+    {
+        return $this->belongsToMany(PropertyFeatures::class, 'property_feature_mappings', 'property_id', 'feature_id');
+    }
+
+    public function priceHistory()
+    {
+        return $this->hasMany(PropertyPriceHistory::class, 'property_id', 'id');
+    }
+
+    public function valueEstimates()
+    {
+        return $this->hasMany(PropertyValueEstimate::class, 'property_id', 'id');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(PropertyDocuments::class, 'property_id', 'id');
+    }
 }
