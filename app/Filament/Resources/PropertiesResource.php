@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enum\Property\Status;
 use App\Enum\PropertyStatus;
 use App\Enum\PropertyType;
 use App\Filament\Resources\PropertiesResource\Pages;
@@ -87,13 +88,10 @@ class PropertiesResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('type'),
-                Tables\Columns\TextColumn::make('location'),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('title')->label('Nama Properti')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('property_type')->badge()->color(fn (PropertyType $state) => $state->color())->formatStateUsing(fn (PropertyType $state) => $state->label()),
+                Tables\Columns\TextColumn::make('status')->badge()->color(fn (Status $state) => $state->getColor())->formatStateUsing(fn (Status $state) => $state->getLabel()),
                 Tables\Columns\TextColumn::make('price'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')

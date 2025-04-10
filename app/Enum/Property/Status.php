@@ -19,4 +19,15 @@ enum Status:string
     {
         return trans("property.status.{$this->value}");
     }
+
+    public function getColor(): string
+    {
+        return match ($this) {
+            self::DRAFT => 'primary',
+            self::ACTIVE => 'success',
+            self::PENDING => 'warning',
+            self::SOLD => 'danger',
+            self::RENTED => 'info',
+        };
+    }
 }

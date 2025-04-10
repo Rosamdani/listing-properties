@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('agents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->unique()->constrained();
-            $table->string('license_number', 100)->unique();
+            $table->string('license_number', 100)->unique()->nullable();
             $table->string('agency_name', 255)->nullable();
             $table->integer('experience_years')->nullable();
             $table->json('specializations')->nullable();

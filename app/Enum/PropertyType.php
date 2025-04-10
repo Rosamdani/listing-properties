@@ -28,4 +28,14 @@ enum PropertyType: string
             self::LAND => 'Land',
         };
     }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::HOUSE => 'primary',
+            self::APARTMENT => 'warning',
+            self::COMMERCIAL => 'danger',
+            self::LAND => 'success',
+        };
+    }
 }

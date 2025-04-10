@@ -19,6 +19,6 @@
     </script>
 
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA01nmE3NaFHzzPWmQMQfaUwTqORLvzdFo&libraries=places&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBekxlWO9LD6uZ-dSykcuoo8973dM7AHtM&libraries=places&callback=initMap">
     </script>
 @endpush

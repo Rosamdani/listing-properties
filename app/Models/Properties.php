@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
-use App\Enum\PropertyStatus;
+use App\Enum\Property\Furnished;
+use App\Enum\Property\ListingType;
+use App\Enum\Property\Status;
 use App\Enum\PropertyType;
+use Database\Factories\PropertyFactory;
 use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
@@ -13,41 +17,60 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Properties extends Model implements HasMedia
 {
-    use HasVersion4Uuids, HasSEO, InteractsWithMedia;
+    use HasSEO, InteractsWithMedia, HasFactory;
 
     protected $table = 'properties';
 
     protected $fillable = [
-        'name',
-        'type',
+        'owner_id',
+        'agent_id',
+        'property_type',
+        'listing_type',
+        'title',
+        'description',
         'price',
-        'location',
-        'latitude',
-        'longitude',
+        'currency',
         'bedrooms',
         'bathrooms',
-        'garages',
-        'area',
+        'building_size',
+        'land_size',
+        'year_built',
+        'floors',
+        'parking_spots',
         'furnished',
-        'available_from',
-        'description',
         'status',
-        'featured',
-        'amenities',
-        'contact_name',
-        'contact_email',
-        'contact_phone',
+        'published_at',
+        'expires_at',
+        'is_featured',
+        'is_verified',
+        'view_count',
         'slug',
+        'virtual_tour_url',
     ];
 
     protected $casts = [
-        'type' => PropertyType::class,
-        'status' => PropertyStatus::class,
-        'furnished' => 'boolean',
-        'featured' => 'boolean',
-        'amenities' => 'array',
-        'available_from' => 'date',
+        'property_type' => PropertyType::class,
+        'listing_type' => ListingType::class,
+        'price' => 'decimal:2',
+        'bathrooms' => 'decimal:1',
+        'building_size' => 'decimal:2',
+        'land_size' => 'decimal:2',
+        'furnished' => Furnished::class,
+        'status' => Status::class,
+        'published_at' => 'datetime',
+        'expires_at' => 'datetime',
+        'is_featured' => 'boolean',
+        'is_verified' => 'boolean',
+        'view_count' => 'integer',
     ];
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return PropertyFactory::new();
+    }
 
     public function getRouteKeyName(): string
     {
@@ -56,17 +79,17 @@ class Properties extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('images')
+        $this->addMediaCollection('properties')
             ->useFallbackUrl(asset('assets/images/resource/property-1.jpg'));
             
-        $this->addMediaCollection('thumbnail')
+        $this->addMediaCollection('propertu_thumbnail')
             ->singleFile()
             ->useFallbackUrl(asset('assets/images/resource/property-1.jpg'));
     }
 
     public function getThumbnailAttribute()
     {
-        return $this->getFirstMediaUrl('thumbnail') ?: $this->getFirstMediaUrl('images') ?: asset('assets/images/resource/property-1.jpg');
+        return $this->getFirstMediaUrl('thumbnail') ?: $this->getFirstMediaUrl('properties') ?: asset('assets/images/resource/property-1.jpg');
     }
 
     public function getImagesAttribute()
@@ -76,12 +99,12 @@ class Properties extends Model implements HasMedia
 
     public function getFormattedPriceAttribute()
     {
-        return 'Rp' . number_format($this->price, 2);
+        return $this->currency . ' ' . number_format($this->price, 2);
     }
 
     public function getFormattedAreaAttribute()
     {
-        return $this->area . ' m²';
+        return $this->building_size . ' m²';
     }
 
     protected static function boot()
@@ -90,18 +113,8 @@ class Properties extends Model implements HasMedia
 
         static::creating(function ($property) {
             if (empty($property->slug)) {
-                $property->slug = Str::slug($property->name);
+                $property->slug = Str::slug($property->title);
             }
         });
-    }
-
-    public function images()
-    {
-        return $this->hasMany(PropertyImage::class, 'property_id');
-    }
-
-    public function primaryImage()
-    {
-        return $this->hasOne(PropertyImage::class, 'property_id')->where('is_primary', true);
     }
 }
