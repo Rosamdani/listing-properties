@@ -6,15 +6,19 @@ use App\Enum\Property\Furnished;
 use App\Enum\Property\ListingType;
 use App\Enum\Property\Status;
 use App\Enum\PropertyType;
+use App\Observers\PropertyObserver;
 use Database\Factories\PropertyFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Concerns\HasVersion4Uuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use RalphJSmit\Laravel\SEO\Models\SEO;
 use RalphJSmit\Laravel\SEO\Support\HasSEO;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
+#[ObservedBy(PropertyObserver::class)]
 class Properties extends Model implements HasMedia
 {
     use HasSEO, InteractsWithMedia, HasFactory;
@@ -76,6 +80,12 @@ class Properties extends Model implements HasMedia
     {
         return 'slug';
     }
+
+    public function seo()
+    {
+        return $this->morphOne(SEO::class, 'model');
+    }
+
 
     public function registerMediaCollections(): void
     {

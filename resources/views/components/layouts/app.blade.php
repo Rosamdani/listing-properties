@@ -19,4 +19,14 @@
     <x-wrapper.progress />
     <x-layouts.scripts />
     @stack('scripts')
+    <script>
+        let autocomplete;
+        function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocompleteMap'),
+            {
+            fields: ["place_id", "geometry", "name", "formatted_address"]
+            });
+        }
+    </script>
 </html>

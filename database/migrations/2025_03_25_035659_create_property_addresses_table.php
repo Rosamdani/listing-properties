@@ -21,8 +21,9 @@ return new class extends Migration
             $table->string('province', 100);
             $table->string('postal_code', 20)->nullable();
             $table->string('country', 100)->default('Indonesia');
-            $table->decimal('latitude', 10, 8)->nullable();
-            $table->decimal('longitude', 11, 8)->nullable();
+            $table->decimal('lat', 10, 8)->nullable();
+            $table->decimal('lng', 11, 8)->nullable();
+            $table->json('location')->nullable();
             $table->boolean('display_address')->default(true);
             $table->timestamps();
         });

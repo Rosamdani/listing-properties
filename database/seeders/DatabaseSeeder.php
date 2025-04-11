@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         User::factory(30)->create()->each(function ($user) {
             $agent = Agent::factory()
                 ->for($user)
-                ->has(Properties::factory()->count(5)->has(PropertyAddress::factory(), 'address'), 'properties')
+                ->has(Properties::factory()->count(5)->has(PropertyAddress::factory(), 'propertyAddress'), 'properties')
                 ->create();
         });
     }

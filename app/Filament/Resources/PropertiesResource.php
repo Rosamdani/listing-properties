@@ -8,6 +8,7 @@ use App\Enum\PropertyType;
 use App\Filament\Resources\PropertiesResource\Pages;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use App\Models\Properties;
+use ArberMustafa\FilamentLocationPickrField\Forms\Components\LocationPickr;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -16,12 +17,13 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use RalphJSmit\Filament\SEO\SEO;
+use Tapp\FilamentGoogleAutocomplete\Forms\Components\GoogleAutocomplete;
 
 class PropertiesResource extends Resource
 {
     protected static ?string $model = Properties::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-s-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -31,7 +33,7 @@ class PropertiesResource extends Resource
                     ->tabs([
                         Forms\Components\Tabs\Tab::make('Informasi Dasar')
                             ->label(trans('filament.properties.form.basic_information'))
-                            ->icon('heroicon-o-home')
+                            ->icon('heroicon-s-home')
                             ->columns(2)
                             ->schema([
                                 Forms\Components\TextInput::make('title')
@@ -121,7 +123,7 @@ class PropertiesResource extends Resource
                             ]),
                             
                         Forms\Components\Tabs\Tab::make('Deskripsi')
-                            ->icon('heroicon-o-document-text')
+                            ->icon('heroicon-s-document-text')
                             ->schema([
                                 Forms\Components\RichEditor::make('description')
                                     ->required()
@@ -131,48 +133,116 @@ class PropertiesResource extends Resource
                             ]),
                         Forms\Components\Tabs\Tab::make('propertyAddress')
                             ->label('Alamat')
-                            ->icon('heroicon-o-map-pin')
+                            ->icon('heroicon-s-map-pin')
                             ->schema([
                                 Forms\Components\Fieldset::make('')
                                     ->relationship('propertyAddress')
                                     ->schema([
-                                            Forms\Components\TextInput::make('street_address')
-                                                ->label('Alamat Jalan')
+                                            GoogleAutocomplete::make('')
+                                                ->placesApiNew()
+                                                ->withFields([
+                                                    Forms\Components\TextInput::make('street_address')
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => '{street_number} {route}, {sublocality_level_1}',
+                                                        ]),
+                                                    Forms\Components\TextInput::make('city')
+                                                        ->required()
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => 'administrative_area_level_2',
+                                                        ])
+                                                        ->label('Kabupaten/Kota'),
+                                                        
+                                                    Forms\Components\TextInput::make('district')
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => '{sublocality_level_1}, {sublocality_level_2}, {place_id}, {country}, {route}, {website}',
+                                                        ])
+                                                        ->label('Kecamatan/Distrik'),
+                                                    Forms\Components\TextInput::make('province')
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => 'administrative_area_level_1',
+                                                        ])
+                                                        ->required()
+                                                        ->label('Provinsi'),
+                                                    Forms\Components\TextInput::make('country')
+                                                        ->default('Indonesia')
+                                                        ->required()
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => 'country',
+                                                        ])
+                                                        ->label('Negara'),
+                                                    Forms\Components\TextInput::make('postal_code')
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => 'postal_code',
+                                                        ]),
+                                                    Forms\Components\TextInput::make('lat')
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => 'latitude',
+                                                        ])
+                                                        ->label('Latitude')
+                                                        ->readOnly()
+                                                        ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                                                            $lng = $get('lng');
+                                                            if ($lng) {
+                                                                $set('location', ['lat' => $state, 'lng' => $lng]);
+                                                            }
+                                                        }),
+                                                    
+                                                    Forms\Components\TextInput::make('lng')
+                                                        ->extraInputAttributes([
+                                                            'data-google-field' => 'longitude',
+                                                        ])
+                                                        ->label('Longitude')
+                                                        ->readOnly()
+                                                        ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                                                            $lat = $get('lat');
+                                                            if ($lat) {
+                                                                $set('location', ['lat' => $lat, 'lng' => $state]);
+                                                            }
+                                                        })
+                                                        ,
+                                                    
+                                                ])
                                                 ->columnSpanFull(),
                                             Forms\Components\TextInput::make('unit_number')
                                                 ->label('Nomor Unit / Rumah'),
-                                            Forms\Components\TextInput::make('city')
-                                                ->required()
-                                                ->label('Kota'),
-                                            Forms\Components\TextInput::make('district')
-                                                ->label('Kecamatan/Distrik'),
-                                            Forms\Components\TextInput::make('province')
-                                                ->required()
-                                                ->label('Provinsi'),
-                                            Forms\Components\TextInput::make('postal_code')
-                                                ->label('Kode Pos'),
-                                            Forms\Components\TextInput::make('country')
-                                                ->default('Indonesia')
-                                                ->required()
-                                                ->label('Negara'),
-                                            Forms\Components\Grid::make(2)
-                                                ->schema([
-                                                    Forms\Components\TextInput::make('latitude')
-                                                        ->numeric()
-                                                        ->label('Latitude'),
-                                                    Forms\Components\TextInput::make('longitude')
-                                                        ->numeric()
-                                                        ->label('Longitude'),
-                                                ]),
+                                           
+                                            LocationPickr::make('location')
+                                                ->columnSpanFull()
+                                                ->mapControls([
+                                                    'mapTypeControl'    => true,
+                                                    'scaleControl'      => true,
+                                                    'streetViewControl' => true,
+                                                    'rotateControl'     => true,
+                                                    'fullscreenControl' => true,
+                                                    'zoomControl'       => false,
+                                                ])
+                                                ->defaultZoom(5)
+                                                ->draggable()
+                                                ->clickable()
+                                                ->height('70vh')
+                                                ->defaultLocation([-6.179382, 106.826893])
+                                                ->myLocationButtonLabel('My Location')
+                                                ->afterStateUpdated(function ($state, callable $set) {
+                                                    if (is_array($state) && isset($state['lat']) && isset($state['lng'])) {
+                                                        $set('lat', $state['lat']);
+                                                        $set('lng', $state['lng']);
+                                                    }
+                                                })
+                                                ->afterStateHydrated(function ($state, callable $set) {
+                                                    if (is_array($state) && isset($state['lat']) && isset($state['lng'])) {
+                                                        $set('location', $state);
+                                                    }
+                                                }),
                                             Forms\Components\Toggle::make('display_address')
                                                 ->label('Tampilkan Alamat Lengkap')
                                                 ->helperText('Jika dinonaktifkan, hanya kota dan provinsi yang akan ditampilkan')
                                                 ->default(true),
                                         ]),
-                                    ]),
+                                    ]), 
                         
-                        Forms\Components\Tabs\Tab::make('Media')
-                            ->icon('heroicon-o-photo')
+                        
+                                    Forms\Components\Tabs\Tab::make('Media')
+                            ->icon('heroicon-s-photo')
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('Thumbnail')
                                     ->collection('property-images')
@@ -203,14 +273,16 @@ class PropertiesResource extends Resource
                                     ->columnSpanFull(),
                             ]),
                             
-                        Forms\Components\Tabs\Tab::make('Fitur & Fasilitas')
-                            ->icon('heroicon-o-star')
+                       
+                       
+                            Forms\Components\Tabs\Tab::make('Fitur & Fasilitas')
+                            ->icon('heroicon-s-star')
                             ->schema([
-                                Forms\Components\CheckboxList::make('propertyFeatures')
+                                Forms\Components\Select::make('propertyFeatures')
                                     ->label('Fitur Properti')
+                                    ->multiple()
                                     ->relationship('features', 'name')
                                     ->columns(3)
-                                    ->bulkToggleable()
                                     ->columnSpanFull(),
                                 Forms\Components\Section::make('Fitur Tambahan')
                                     ->schema([
@@ -227,7 +299,7 @@ class PropertiesResource extends Resource
                             ]),
                             
                         Forms\Components\Tabs\Tab::make('Harga & Riwayat')
-                            ->icon('heroicon-o-currency-dollar')
+                            ->icon('heroicon-s-currency-dollar')
                             ->schema([
                                 Forms\Components\Section::make('Riwayat Harga')
                                     ->schema([
@@ -274,7 +346,7 @@ class PropertiesResource extends Resource
                                                     ->required()
                                                     ->numeric()
                                                     ->label('Estimasi Nilai')
-                                                    ->suffixIcon('heroicon-o-currency-dollar'),
+                                                    ->suffixIcon('heroicon-s-currency-dollar'),
                                                 Forms\Components\DateTimePicker::make('estimate_date')
                                                     ->required()
                                                     ->default(now())
@@ -288,11 +360,11 @@ class PropertiesResource extends Resource
                                                 Forms\Components\TextInput::make('high_estimate')
                                                     ->numeric()
                                                     ->label('Estimasi Tinggi')
-                                                    ->suffixIcon('heroicon-o-currency-dollar'),
+                                                    ->suffixIcon('heroicon-s-currency-dollar'),
                                                 Forms\Components\TextInput::make('low_estimate')
                                                     ->numeric()
                                                     ->label('Estimasi Rendah')
-                                                    ->suffixIcon('heroicon-o-currency-dollar'),
+                                                    ->suffixIcon('heroicon-s-currency-dollar'),
                                                 Forms\Components\Textarea::make('factors')
                                                     ->label('Faktor-faktor')
                                                     ->helperText('Masukkan dalam format JSON atau teks biasa')
@@ -315,7 +387,7 @@ class PropertiesResource extends Resource
                             ]),
                             
                         Forms\Components\Tabs\Tab::make('Dokumen')
-                            ->icon('heroicon-o-document-duplicate')
+                            ->icon('heroicon-s-document-duplicate')
                             ->schema([
                                 Forms\Components\Repeater::make('documents')
                                     ->relationship('documents')
@@ -341,60 +413,6 @@ class PropertiesResource extends Resource
                                     ->itemLabel(fn (array $state): ?string => $state['title'] ?? null)
                                     ->addActionLabel('Tambah Dokumen')
                                     ->columns(2),
-                            ]),
-                        
-                        Forms\Components\Tabs\Tab::make('SEO')
-                            ->icon('heroicon-o-globe-alt')
-                            ->schema([
-                                SEO::make(),
-                            ]),
-                    
-                        Forms\Components\Tabs\Tab::make('Analitik')
-                            ->icon('heroicon-o-chart-bar')
-                            ->schema([
-                                Forms\Components\Group::make()
-                                    ->schema([
-                                        Forms\Components\Placeholder::make('views_total')
-                                            ->label('Total Dilihat')
-                                            ->content(fn ($record) => $record && $record->analytics ? $record->analytics->views_total : 0),
-                                        Forms\Components\Placeholder::make('views_last_7d')
-                                            ->label('Dilihat 7 Hari Terakhir')
-                                            ->content(fn ($record) => $record && $record->analytics ? $record->analytics->views_last_7d : 0),
-                                        Forms\Components\Placeholder::make('views_last_30d')
-                                            ->label('Dilihat 30 Hari Terakhir')
-                                            ->content(fn ($record) => $record && $record->analytics ? $record->analytics->views_last_30d : 0),
-                                    ])
-                                    ->columns(3),
-                                Forms\Components\Group::make()
-                                    ->schema([
-                                        Forms\Components\Placeholder::make('saves_total')
-                                            ->label('Total Disimpan')
-                                            ->content(fn ($record) => $record && $record->analytics ? $record->analytics->saves_total : 0),
-                                        Forms\Components\Placeholder::make('inquiries_total')
-                                            ->label('Total Pertanyaan')
-                                            ->content(fn ($record) => $record && $record->analytics ? $record->analytics->inquiries_total : 0),
-                                        Forms\Components\Placeholder::make('listing_quality_score')
-                                            ->label('Skor Kualitas Listing')
-                                            ->content(function ($record) {
-                                                if (!$record || !$record->analytics || !$record->analytics->listing_quality_score) {
-                                                    return 'Belum dinilai';
-                                                }
-                                                
-                                                $score = $record->analytics->listing_quality_score;
-                                                
-                                                // Return formatted score with appropriate color
-                                                if ($score >= 4.5) {
-                                                    return '<span class="text-success font-bold">' . $score . ' - Sangat Baik</span>';
-                                                } elseif ($score >= 3.5) {
-                                                    return '<span class="text-primary font-medium">' . $score . ' - Baik</span>';
-                                                } elseif ($score >= 2.5) {
-                                                    return '<span class="text-warning font-medium">' . $score . ' - Cukup</span>';
-                                                } else {
-                                                    return '<span class="text-danger font-medium">' . $score . ' - Perlu Perbaikan</span>';
-                                                }
-                                            }),
-                                    ])
-                                    ->columns(3),
                             ]),
                     ])->columnSpanFull(),
             ]);
@@ -437,8 +455,8 @@ class PropertiesResource extends Resource
         return [
             'index' => Pages\ListProperties::route('/'),
             'create' => Pages\CreateProperties::route('/create'),
-            'edit' => Pages\EditProperties::route('/{record}/edit'),
             'view' => Pages\ViewProperties::route('/{record}'),
+            'edit' => Pages\EditProperties::route('/{record}/edit'),
         ];
     }
 }

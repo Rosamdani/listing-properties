@@ -24,8 +24,8 @@ class PropertyAddressFactory extends Factory
             'province' => $this->faker->state(),
             'postal_code' => $this->faker->postcode(),
             'country' => 'Indonesia',
-            'latitude' => $this->faker->latitude(),
-            'longitude' => $this->faker->longitude(),
+            'lat' => $this->faker->latitude(),
+            'lng' => $this->faker->longitude(),
             'display_address' => true,
         ];
     }
